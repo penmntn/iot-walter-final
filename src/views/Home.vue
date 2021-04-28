@@ -1,16 +1,15 @@
 <template>
   <div class="home">
-    <charts></charts>
+    <real-time/>
   </div>
 </template>
 
 <script>
-import charts from '../components/chart1.vue'
-
+import RealTime from '../components/RealTime.vue'
 export default {
   name: 'Home',
   components: {
-    charts
+    RealTime
   }
 }
 </script>
