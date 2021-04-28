@@ -1,6 +1,10 @@
 <template>
     <div>
-        <chartuu :Sensor1="Sensor1" :horas="Hora" :Sensor2="Sensor2" :Sensor3="Sensor3" :Sensor4="Sensor4" :Sensor5="Sensor5" :valMax="valMax" > </chartuu>
+        <div>
+          <b-card style="max-width: 100%; height : 60%;" class="mb-2">
+             <chartuu :chartData="dataset" :options="options"> </chartuu>
+          </b-card>
+        </div>
     </div>
 </template>
 <script>
@@ -12,41 +16,29 @@ export default {
   data () {
     return {
       fecha: '20-04-2021',
-      Sensor1: [],
-      Sensor2: [],
-      Sensor3: [],
-      Sensor4: [],
-      Sensor5: [],
-      valMax: [],
-      Hora: []
+      dataset: [],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+  },
+  methods: {
+    data_formater: function (label, S1, S2, S3, s4, s5, max) {
+      return {
+        labels: label
+      }
     }
   },
   components: {
     chartuu
   },
-  methods: {
-    getDataTest: function () {
-      const db = firebase.database()
-      db.ref('iot6/' + this.fecha).get()
-        .then((snapshot) => {
-          snapshot.forEach(data => {
-            console.log(data.val())
-            this.Sensor1.push(data.val().Sensor1)
-            this.Sensor2.push(data.val().Sensor2)
-            this.Sensor3.push(data.val().Sensor3)
-            this.Sensor4.push(data.val().Sensor4)
-            this.Sensor5.push(data.val().Sensor5)
-            this.valMax.push(data.val().valMax)
-            this.Hora.push(data.val().Hora)
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    mounted () {
-      this.getDataTest()
-    }
+  async mounted () {
+    const db = firebase.database()
+    const query = db.ref('iot6/' + this.fecha)
+    const result = await query.get()
+    const data = result.val()
+    data.forEach((data))
   }
 }
 
