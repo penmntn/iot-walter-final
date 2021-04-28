@@ -1,10 +1,4 @@
-<template>
-    <div>
-        {'dsakmd'}
-    </div>
-</template>
 <script>
-// CommitChart.js
 import { Line } from 'vue-chartjs'
 
 export default {
