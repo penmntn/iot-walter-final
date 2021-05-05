@@ -8,13 +8,13 @@ export default {
     chartData: { type: Object },
     options: { type: Object }
   },
-  watch: {
-    chartData () {
-      this.$data._chart.update()
-    }
-  },
   mounted () {
-    this.renderChart(this.chartdata, this.options)
+    this.renderChart(this.chartData, this.options)
+  },
+  watch: {
+    chartData: function () {
+      this.renderChart(this.chartData, this.options)
+    }
   }
 }
 </script>
