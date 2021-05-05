@@ -1,7 +1,8 @@
 <template>
     <div>
-        <b-form-select :options="selectOptions" v-model="selectValue"/>
-        <real-time-chart :chartData="chartData" :options="chartOptions"/>
+         <b-card style="max-width: 100%; height : 60%;  margin: 0px 25px 0px 25px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" class="mb-2" >
+             <real-time-chart :chartData="chartData" :options="chartOptions"/>
+        </b-card>
     </div>
 </template>
 
@@ -22,7 +23,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false
       },
-      today: '04-05-2021',
+      today: '05-05-2021',
       data: {
         sensores0: [],
         sensores1: [],

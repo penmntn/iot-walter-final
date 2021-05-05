@@ -1,7 +1,7 @@
 <template>
     <div>
       <div>
-        <b-nav  style="margin: 0px 25px 15px 25px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <b-nav  style="margin: 10px 25px 15px 25px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
           <b-nav-item ><b-form-datepicker id="example-datepicker" v-model="fechaTemp" class="mb-2" :date-format-options="{ day: '2-digit', month: '2-digit', year: 'numeric'}" locale="es" ></b-form-datepicker></b-nav-item>
         </b-nav>
       </div>
