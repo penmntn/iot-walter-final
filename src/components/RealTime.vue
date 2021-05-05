@@ -17,13 +17,17 @@ export default {
     RealTimeChart
   },
   data () {
+    var hoy = new Date()
+    var dd = String(hoy.getDate()).padStart(2, '0')
+    var mm = String(hoy.getMonth() + 1).padStart(2, '0')
+    var yyyy = hoy.getFullYear()
     return {
       buffer: null,
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false
       },
-      today: '05-05-2021',
+      today: dd + '-' + mm + '-' + yyyy,
       data: {
         sensores0: [],
         sensores1: [],
