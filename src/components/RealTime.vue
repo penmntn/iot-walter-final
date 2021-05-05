@@ -40,7 +40,7 @@ export default {
         { value: 'a', text: 'Tiempo' }
       ],
       selectValue: null,
-      isFirstTime: true
+      isFirstTime: false
     }
   },
   beforeMount: function () {
@@ -103,8 +103,8 @@ export default {
         this.data.sensores3.push(this.buffer.Sensor4)
         this.data.sensores4.push(this.buffer.Sensor5)
         this.data.valmax.push(this.buffer.ValMax)
-        this.isFirstTime = false
       }
+      this.isFirstTime = true
     }
   }
 }
