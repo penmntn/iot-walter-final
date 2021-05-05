@@ -1,6 +1,7 @@
 <template>
     <div>
-        <real-time-chart :chart-data="chartData" />
+        <b-form-select :options="selectOptions" v-model="selectValue"/>
+        <real-time-chart :chartData="chartData" :options="chartOptions"/>
     </div>
 </template>
 
@@ -16,59 +17,93 @@ export default {
   },
   data () {
     return {
+      buffer: null,
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      },
+      today: '04-05-2021',
       data: {
-        sensores: new Array(6).fill([]), // el sensor 5 es el valor maximo
+        sensores0: [],
+        sensores1: [],
+        sensores2: [],
+        sensores3: [],
+        sensores4: [],
+        valmax: [],
         hora: []
       },
       chartData: {},
       labels: ['Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'Sensor 5', 'Max Val'],
-      colores: ['red', 'orange', 'yellow', 'green', 'orange', 'blue']
+      colores: ['red', 'orange', 'yellow', 'green', 'orange', 'blue'],
+      selectOptions: [
+        { value: 'a', text: 'Tiempo' }
+      ],
+      selectValue: null,
+      isFirstTime: true
     }
   },
   beforeMount: function () {
-    console.log(this.data)
     this.getDataTest().then(() => {
       this.preprocerData()
     })
   },
   methods: {
     getDataTest: async function () {
-      const db = await firebase.database()
-      await db.ref('iot6/').get()
+      const db = firebase.database()
+      await db.ref('iot6/' + this.today).limitToLast(10).get()
         .then((snapshot) => {
           snapshot.forEach(data => {
-            console.log(data.val())
             const temp = data.val()
-            for (const item in temp) {
-              this.data.sensores[0].push(temp[item].Sensor1)
-              this.data.sensores[1].push(temp[item].Sensor2)
-              this.data.sensores[2].push(temp[item].Sensor3)
-              this.data.sensores[3].push(temp[item].Sensor4)
-              this.data.sensores[4].push(temp[item].Sensor5)
-              this.data.sensores[5].push(temp[item].ValMax)
-              this.data.hora.push(temp[item].Hora)
-            }
+            this.data.sensores0.push(temp.Sensor1)
+            this.data.sensores1.push(temp.Sensor2)
+            this.data.sensores2.push(temp.Sensor3)
+            this.data.sensores3.push(temp.Sensor4)
+            this.data.sensores4.push(temp.Sensor5)
+            this.data.valmax.push(temp.ValMax)
+            this.data.hora.push(temp.Hora)
           })
         })
         .catch((error) => {
           console.log(error)
         })
-      console.log('se ejecuto')
-      console.log(this.data)
+      console.log('the basic data was brought')
     },
-    preprocerData: function () {
+    preprocerData: async function () {
       this.chartData = {
         labels: this.data.hora,
         datasets: []
       }
-      for (const ind in this.data.sensores) {
+      console.log(this.data)
+      for (const x of Array(5).keys()) {
         this.chartData.datasets.push({
-          label: this.labels[ind],
-          data: this.data.sensores[ind],
-          borderColor: this.colores[ind]
+          label: this.labels[x],
+          data: this.data[`sensores${x}`],
+          borderColor: this.colores[x]
         })
+        console.log(this.data[`sensores${x}`])
       }
-      console.log(this.chartData)
+      const dbrealtime = firebase.database().ref('iot6/' + this.today).limitToLast(1)
+      await dbrealtime.on('value', (snapshot) => {
+        console.log('this bullshit was called', snapshot.val())
+        snapshot.forEach(data => {
+          this.buffer = data.val()
+        })
+      })
+    }
+  },
+  watch: {
+    buffer: function () {
+      if (this.isFirstTime) {
+        console.log('buffer', this.buffer)
+        this.data.hora.push(this.buffer.Hora)
+        this.data.sensores0.push(this.buffer.Sensor1)
+        this.data.sensores1.push(this.buffer.Sensor2)
+        this.data.sensores2.push(this.buffer.Sensor3)
+        this.data.sensores3.push(this.buffer.Sensor4)
+        this.data.sensores4.push(this.buffer.Sensor5)
+        this.data.valmax.push(this.buffer.ValMax)
+        this.isFirstTime = false
+      }
     }
   }
 }

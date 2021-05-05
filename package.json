@@ -11,6 +11,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.8.0",
+    "chartjs-plugin-streaming": "^1.8.0",
     "core-js": "^3.6.5",
     "d3": "^6.7.0",
     "firebase": "^8.4.2",
