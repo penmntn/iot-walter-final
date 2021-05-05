@@ -5,16 +5,13 @@ const { reactiveProp } = mixins
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  props: ['options', 'chartData'],
+  props: ['options', 'chartData', 'senalRender'],
   mounted () {
     this.renderChart(this.chartData, this.options)
   },
   watch: {
-    chartData: {
-      handler () {
-        this.renderChart(this.chartData, this.options)
-      },
-      deep: true
+    senalRender: function () {
+      this.renderChart(this.chartData, this.options)
     }
   }
 }

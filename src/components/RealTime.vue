@@ -1,7 +1,7 @@
 <template>
     <div>
          <b-card style="max-width: 100%; height : 60%;  margin: 0px 25px 0px 25px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" class="mb-2" >
-             <real-time-chart :chartData="chartData" :options="chartOptions"/>
+             <real-time-chart :chartData="chartData" :options="chartOptions" :senalRender="reRender"/>
         </b-card>
     </div>
 </template>
@@ -44,7 +44,8 @@ export default {
         { value: 'a', text: 'Tiempo' }
       ],
       selectValue: null,
-      isFirstTime: false
+      isFirstTime: false,
+      reRender: true
     }
   },
   beforeMount: function () {
@@ -107,6 +108,7 @@ export default {
         this.data.sensores3.push(this.buffer.Sensor4)
         this.data.sensores4.push(this.buffer.Sensor5)
         this.data.valmax.push(this.buffer.ValMax)
+        this.reRender = !this.reRender
       }
       this.isFirstTime = true
     }
