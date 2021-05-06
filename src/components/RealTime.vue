@@ -56,7 +56,7 @@ export default {
   methods: {
     getDataTest: async function () {
       const db = firebase.database()
-      await db.ref('iot6/' + this.today).limitToLast(10).get()
+      await db.ref('iot6/' + this.today).limitToLast(15).get()
         .then((snapshot) => {
           snapshot.forEach(data => {
             const temp = data.val()
@@ -72,25 +72,21 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      console.log('the basic data was brought')
     },
     preprocerData: async function () {
       this.chartData = {
         labels: this.data.hora,
         datasets: []
       }
-      console.log(this.data)
       for (const x of Array(5).keys()) {
         this.chartData.datasets.push({
           label: this.labels[x],
           data: this.data[`sensores${x}`],
           borderColor: this.colores[x]
         })
-        console.log(this.data[`sensores${x}`])
       }
       const dbrealtime = firebase.database().ref('iot6/' + this.today).limitToLast(1)
       await dbrealtime.on('value', (snapshot) => {
-        console.log('this bullshit was called', snapshot.val())
         snapshot.forEach(data => {
           this.buffer = data.val()
         })
@@ -100,7 +96,6 @@ export default {
   watch: {
     buffer: function () {
       if (this.isFirstTime) {
-        console.log('buffer', this.buffer)
         this.data.hora.push(this.buffer.Hora)
         this.data.sensores0.push(this.buffer.Sensor1)
         this.data.sensores1.push(this.buffer.Sensor2)
@@ -108,6 +103,15 @@ export default {
         this.data.sensores3.push(this.buffer.Sensor4)
         this.data.sensores4.push(this.buffer.Sensor5)
         this.data.valmax.push(this.buffer.ValMax)
+        if (this.data.sensores1.length > 15) {
+          this.data.hora.shift()
+          this.data.sensores0.shift()
+          this.data.sensores1.shift()
+          this.data.sensores2.shift()
+          this.data.sensores3.shift()
+          this.data.sensores4.shift()
+          this.data.valmax.shift()
+        }
         this.reRender = !this.reRender
       }
       this.isFirstTime = true
